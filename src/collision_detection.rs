@@ -73,7 +73,7 @@ fn handle_collisions<T: Component>(
 ) {
     for (entity, collider) in query.iter() {
         for &collided_entity in collider.colliding_entities.iter() {
-            // Asteroid collided with another asteroid.
+            // Entity collided with another entity of the same type.
             if query.get(collided_entity).is_ok() {
                 continue;
             }
