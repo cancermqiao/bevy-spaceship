@@ -36,6 +36,6 @@ fn main() {
         .add_plugins(CollisionDetectionPlugin)
         .add_plugins(DespawnPlugin)
         .add_plugins(SchedulePlugin)
-        // .add_plugins(DebugPlugin)
+        .add_plugins(DebugPlugin)
         .run();
 }
