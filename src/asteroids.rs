@@ -26,21 +26,21 @@ struct SpawnTimer {
     timer: Timer,
 }
 
-pub struct AsteriodPlugin;
+pub struct AsteroidPlugin;
 
-impl Plugin for AsteriodPlugin {
+impl Plugin for AsteroidPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SpawnTimer {
             timer: Timer::from_seconds(SPAWN_TIME_SECONDS, TimerMode::Repeating),
         })
         .add_systems(
             Update,
-            (spawn_asteriod, rotate_asteroid).in_set(InGameSet::EntityUpdates),
+            (spawn_asteroid, rotate_asteroid).in_set(InGameSet::EntityUpdates),
         );
     }
 }
 
-fn spawn_asteriod(
+fn spawn_asteroid(
     mut commands: Commands,
     mut spawn_timer: ResMut<SpawnTimer>,
     time: Res<Time>,

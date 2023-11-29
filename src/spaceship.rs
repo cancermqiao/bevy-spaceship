@@ -7,7 +7,7 @@ use crate::{
     schedule::InGameSet,
 };
 
-const STARTING_TRANSLATIN: Vec3 = Vec3::new(0.0, 0.0, -20.0);
+const STARTING_TRANSLATION: Vec3 = Vec3::new(0.0, 0.0, -20.0);
 const SPACESHIP_RADIUS: f32 = 5.0;
 const SPACESHIP_SPEED: f32 = 25.0;
 const SPACESHIP_ROTATION_SPEED: f32 = 2.5;
@@ -50,7 +50,7 @@ fn spawn_spaceship(mut commands: Commands, scene_assets: Res<SceneAssets>) {
             collider: Collider::new(SPACESHIP_RADIUS),
             model: SceneBundle {
                 scene: scene_assets.spaceship.clone(),
-                transform: Transform::from_translation(STARTING_TRANSLATIN),
+                transform: Transform::from_translation(STARTING_TRANSLATION),
                 ..default()
             },
         },

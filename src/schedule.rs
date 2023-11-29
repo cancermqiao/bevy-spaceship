@@ -16,7 +16,7 @@ impl Plugin for SchedulePlugin {
             Update,
             (
                 InGameSet::DespawnEntities,
-                // Flush commands (i.e. `apply_derred` runs)
+                // Flush commands (i.e. `apply_deferred` runs)
                 InGameSet::UserInput,
                 InGameSet::EntityUpdates,
                 InGameSet::CollisionDetection,
