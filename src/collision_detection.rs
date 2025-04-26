@@ -1,4 +1,5 @@
-use bevy::{prelude::*, utils::HashMap};
+use bevy::prelude::*;
+use std::collections::HashMap;
 
 use crate::{
     asteroids::Asteroid,
@@ -87,7 +88,7 @@ fn collision_detection(mut query: Query<(Entity, &GlobalTransform, &mut Collider
                     if distance < collider_a.radius + collider_b.radius {
                         colliding_entities
                             .entry(entity_a)
-                            .or_insert_with(Vec::new)
+                            .or_default()
                             .push(entity_b);
                     }
                 }
@@ -117,7 +118,7 @@ fn handle_collisions<T: Component>(
                 continue;
             }
             // Send collision event.
-            collision_event_writer.send(CollisionEvent::new(entity, collided_entity));
+            collision_event_writer.write(CollisionEvent::new(entity, collided_entity));
             break;
         }
     }

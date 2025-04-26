@@ -54,16 +54,16 @@ fn spawn_asteroid(
         return;
     }
 
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
 
     let translation = Vec3::new(
-        rng.gen_range(SPAWN_RANGE_X),
+        rng.random_range(SPAWN_RANGE_X),
         0.,
-        rng.gen_range(SPAWN_RANGE_Z),
+        rng.random_range(SPAWN_RANGE_Z),
     );
 
     let mut random_unit_vector =
-        || Vec3::new(rng.gen_range(-1.0..1.0), 0., rng.gen_range(-1.0..1.0)).normalize_or_zero();
+        || Vec3::new(rng.random_range(-1.0..1.0), 0., rng.random_range(-1.0..1.0)).normalize_or_zero();
     let velocity = random_unit_vector() * VELOCITY_SCALAR;
     let acceleration = random_unit_vector() * ACCELERATION_SCALAR;
 
@@ -72,11 +72,8 @@ fn spawn_asteroid(
             velocity: Velocity::new(velocity),
             acceleration: Acceleration::new(acceleration),
             collider: Collider::new(RADIUS),
-            model: SceneBundle {
-                scene: scene_assets.asteroid.clone(),
-                transform: Transform::from_translation(translation),
-                ..default()
-            },
+            model: SceneRoot(scene_assets.asteroid.clone()),
+            transform: Transform::from_translation(translation)
         },
         Asteroid,
         Health::new(HEALTH),
@@ -86,6 +83,6 @@ fn spawn_asteroid(
 
 fn rotate_asteroid(mut query: Query<&mut Transform, With<Asteroid>>, time: Res<Time>) {
     for mut transform in query.iter_mut() {
-        transform.rotate_local_z(ROTATE_SPEED * time.delta_seconds());
+        transform.rotate_local_z(ROTATE_SPEED * time.delta_secs());
     }
 }

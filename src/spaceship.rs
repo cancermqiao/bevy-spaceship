@@ -57,11 +57,8 @@ fn spawn_spaceship(mut commands: Commands, scene_assets: Res<SceneAssets>) {
             velocity: Velocity::new(Vec3::ZERO),
             acceleration: Acceleration::new(Vec3::ZERO),
             collider: Collider::new(SPACESHIP_RADIUS),
-            model: SceneBundle {
-                scene: scene_assets.spaceship.clone(),
-                transform: Transform::from_translation(STARTING_TRANSLATION),
-                ..default()
-            },
+            model: SceneRoot(scene_assets.spaceship.clone()),
+            transform: Transform::from_translation(STARTING_TRANSLATION),
         },
         Spaceship,
         Health::new(SPACESHIP_HEALTH),
@@ -71,31 +68,31 @@ fn spawn_spaceship(mut commands: Commands, scene_assets: Res<SceneAssets>) {
 
 fn spaceship_movement_controls(
     mut query: Query<(&mut Transform, &mut Velocity), With<Spaceship>>,
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
-    let Ok((mut transform, mut velocity)) = query.get_single_mut() else {
+    let Ok((mut transform, mut velocity)) = query.single_mut() else {
         return;
     };
     let mut rotation = 0.0;
     let mut roll = 0.0;
     let mut movement = 0.0;
 
-    if keyboard_input.pressed(KeyCode::D) {
-        rotation = -SPACESHIP_ROTATION_SPEED * time.delta_seconds();
-    } else if keyboard_input.pressed(KeyCode::A) {
-        rotation = SPACESHIP_ROTATION_SPEED * time.delta_seconds();
+    if keyboard_input.pressed(KeyCode::KeyD) {
+        rotation = -SPACESHIP_ROTATION_SPEED * time.delta_secs();
+    } else if keyboard_input.pressed(KeyCode::KeyA) {
+        rotation = SPACESHIP_ROTATION_SPEED * time.delta_secs();
     }
 
     if keyboard_input.pressed(KeyCode::ShiftLeft) {
-        roll = -SPACESHIP_ROLL_SPEED * time.delta_seconds();
+        roll = -SPACESHIP_ROLL_SPEED * time.delta_secs();
     } else if keyboard_input.pressed(KeyCode::ControlLeft) {
-        roll = SPACESHIP_ROLL_SPEED * time.delta_seconds();
+        roll = SPACESHIP_ROLL_SPEED * time.delta_secs();
     }
 
-    if keyboard_input.pressed(KeyCode::S) {
+    if keyboard_input.pressed(KeyCode::KeyS) {
         movement = -SPACESHIP_SPEED;
-    } else if keyboard_input.pressed(KeyCode::W) {
+    } else if keyboard_input.pressed(KeyCode::KeyW) {
         movement = SPACESHIP_SPEED;
     }
 
@@ -114,10 +111,10 @@ fn spaceship_movement_controls(
 fn spaceship_weapon_controls(
     mut commands: Commands,
     query: Query<&Transform, With<Spaceship>>,
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     scene_assets: Res<SceneAssets>,
 ) {
-    let Ok(transform) = query.get_single() else {
+    let Ok(transform) = query.single() else {
         return;
     };
     if keyboard_input.pressed(KeyCode::Space) {
@@ -126,13 +123,10 @@ fn spaceship_weapon_controls(
                 velocity: Velocity::new(-transform.forward() * MISSILE_SPEED),
                 acceleration: Acceleration::new(Vec3::ZERO),
                 collider: Collider::new(MISSILE_RADIUS),
-                model: SceneBundle {
-                    scene: scene_assets.missiles.clone(),
-                    transform: Transform::from_translation(
-                        transform.translation + -transform.forward() * MISSILE_FORWARD_SPAWN_SCALAR,
-                    ),
-                    ..default()
-                },
+                model: SceneRoot(scene_assets.missiles.clone()),
+                transform: Transform::from_translation(
+                    transform.translation + -transform.forward() * MISSILE_FORWARD_SPAWN_SCALAR,
+                ),
             },
             SpaceshipMissile,
             Health::new(MISSILE_HEALTH),
@@ -144,9 +138,9 @@ fn spaceship_weapon_controls(
 fn spaceship_shield_controls(
     mut commands: Commands,
     query: Query<Entity, With<Spaceship>>,
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
 ) {
-    let Ok(entity) = query.get_single() else {
+    let Ok(entity) = query.single() else {
         return;
     };
 
@@ -159,7 +153,7 @@ fn spaceship_destroyed(
     mut next_state: ResMut<NextState<GameState>>,
     query: Query<(), With<Spaceship>>,
 ) {
-    if query.get_single().is_err() {
+    if query.single().is_err() {
         next_state.set(GameState::GameOver);
     }
 }

@@ -25,10 +25,11 @@ use state::StatePlugin;
 fn main() {
     App::new()
         // Bevy built-ins.
-        .insert_resource(ClearColor(Color::rgb(0.1, 0.0, 0.15)))
+        .insert_resource(ClearColor(Color::srgb(0.1, 0.0, 0.15)))
         .insert_resource(AmbientLight {
             color: Color::default(),
-            brightness: 0.75,
+            brightness: 500.0,
+            affects_lightmapped_meshes: true,
         })
         .add_plugins(DefaultPlugins)
         .add_plugins(AssetLoaderPlugin)
