@@ -1,5 +1,4 @@
-use bevy::prelude::*;
-use std::collections::HashMap;
+use bevy::{platform::collections::HashMap, prelude::*};
 
 use crate::{
     asteroids::Asteroid,
